@@ -15,7 +15,7 @@ def get_graph_info(name: str) -> GraphInfo:
     graph = cfpq_data.graph_from_csv(path)
 
     return GraphInfo(
-        graph.number_of_nodes,
-        graph.number_of_edges,
+        graph.number_of_nodes(),
+        graph.number_of_edges(),
         set(cfpq_data.get_sorted_labels(graph)),
     )
