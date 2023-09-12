@@ -5,7 +5,7 @@ import networkx as nx
 def create_labeled_two_cycles_graph(
     n: int, m: int, labels: tuple[str, str]
 ) -> nx.MultiDiGraph:
-    return cfpq_data.labeled_two_cycles_graph(n, m, labels)
+    return cfpq_data.labeled_two_cycles_graph(n, m, labels=labels)
 
 
 def graph_to_dot(graph: nx.MultiDiGraph, output_path: str) -> None:
