@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Set
 import cfpq_data
 
 
@@ -7,7 +7,7 @@ import cfpq_data
 class GraphInfo:
     vertices: int
     edges: int
-    labels: set[Any]
+    labels: Set[Any]
 
 
 def get_graph_info(name: str) -> GraphInfo:
