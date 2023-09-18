@@ -2,11 +2,9 @@ from pyformlang.regular_expression import Regex
 from pyformlang.finite_automaton import (
     DeterministicFiniteAutomaton,
     NondeterministicFiniteAutomaton,
-    FiniteAutomaton,
 )
 from networkx import MultiDiGraph
 from typing import Set
-from loguru import logger
 
 
 def regex_to_dfa(regex: Regex) -> DeterministicFiniteAutomaton:
