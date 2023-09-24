@@ -4,5 +4,6 @@ cfpq-data
 mypy
 pre-commit
 pydot
+pyformlang
 pytest
 scipy
