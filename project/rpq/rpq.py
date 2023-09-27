@@ -4,7 +4,6 @@ from typing import Set
 
 from project.automata.utils import graph_to_nfa, regex_to_dfa
 from project.automata.decomposed_fa import DecomposedFA
-from loguru import logger
 
 
 def rpq(

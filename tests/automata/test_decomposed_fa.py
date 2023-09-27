@@ -1,7 +1,6 @@
 import pytest
 from pyformlang.finite_automaton import NondeterministicFiniteAutomaton
 from scipy.sparse import csr_matrix
-from loguru import logger
 
 from project.automata.decomposed_fa import DecomposedFA
 

@@ -1,6 +1,5 @@
 from pyformlang.finite_automaton import FiniteAutomaton, NondeterministicFiniteAutomaton
 from scipy.sparse import csr_matrix, kron
-from loguru import logger
 
 
 class DecomposedFA:
