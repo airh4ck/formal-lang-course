@@ -55,7 +55,7 @@ class DecomposedFA:
             result.matrices[label] = kron(self.matrices[label], other.matrices[label])
 
         for self_index, self_state in enumerate(self.states_with_indices.keys()):
-            for other_index, other_state in enumerate(self.states_with_indices.keys()):
+            for other_index, other_state in enumerate(other.states_with_indices.keys()):
                 result_state = self_index * other.num_states + other_index
                 result.states_with_indices[result_state] = result_state
 
@@ -80,7 +80,7 @@ class DecomposedFA:
 
         result = sum(self.matrices.values())
 
-        for i in range(self.num_states):
+        for _ in range(self.num_states):
             result += result @ result
 
         return result
