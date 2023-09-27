@@ -73,3 +73,11 @@ class DecomposedFA:
 
         result.num_states = self.num_states * other.num_states
         return result
+
+    def transitive_closure(self):
+        result = sum(self.matrices.values())
+
+        for i in range(self.num_states):
+            result += result @ result
+
+        return result
