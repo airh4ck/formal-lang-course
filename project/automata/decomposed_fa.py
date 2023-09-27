@@ -74,7 +74,10 @@ class DecomposedFA:
         result.num_states = self.num_states * other.num_states
         return result
 
-    def transitive_closure(self):
+    def transitive_closure(self) -> csr_matrix:
+        if self.num_states == 0:
+            return csr_matrix((0, 0), dtype=bool)
+
         result = sum(self.matrices.values())
 
         for i in range(self.num_states):

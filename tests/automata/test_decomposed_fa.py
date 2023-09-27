@@ -1,5 +1,7 @@
 import pytest
 from pyformlang.finite_automaton import NondeterministicFiniteAutomaton
+from scipy.sparse import csr_matrix
+from loguru import logger
 
 from project.automata.decomposed_fa import DecomposedFA
 
@@ -81,3 +83,29 @@ def test_intersect_with_parallel_edges():
         .intersect(DecomposedFA.from_fa(right_nfa))
         .to_fa()
     )
+
+
+def test_transitive_closure_empty():
+    decomposed_fa = DecomposedFA()
+
+    assert decomposed_fa.transitive_closure().sum() == 0
+
+
+def test_trivial_transitive_closure():
+    nfa = NondeterministicFiniteAutomaton()
+    nfa.add_transition(0, "a", 0)
+    nfa.add_start_state(0)
+    nfa.add_final_state(0)
+
+    assert DecomposedFA.from_fa(nfa).transitive_closure().sum() == 1
+
+
+def test_transitive_closure():
+    nfa = NondeterministicFiniteAutomaton()
+    nfa.add_transitions(
+        [(0, "a", 0), (0, "a", 1), (0, "b", 1), (1, "b", 2), (2, "a", 2)]
+    )
+    nfa.add_start_state(0)
+    nfa.add_final_state(1)
+
+    assert DecomposedFA.from_fa(nfa).transitive_closure().sum() == 5
