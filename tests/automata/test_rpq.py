@@ -3,7 +3,7 @@ from networkx import MultiDiGraph
 from pyformlang.regular_expression import Regex
 from pyformlang.finite_automaton import NondeterministicFiniteAutomaton
 
-from project.rpq.rpq import rpq, bfs_based_rpq
+from project.rpq.rpq import rpq, bfs_based_rpq, bfs_based_rpq_by_vertice
 
 
 def test_rpq_empty():
@@ -60,3 +60,32 @@ def test_bfs_based_rpq2():
     )
 
     assert bfs_based_rpq(graph, regex, {0, 1}, {2}) == {1, 2}
+
+
+def test_bfs_based_rpq_by_vertice1():
+    regex = Regex("b*a.b")
+    graph = MultiDiGraph(
+        [
+            (0, 1, {"label": "a"}),
+            (0, 3, {"label": "b"}),
+            (1, 2, {"label": "b"}),
+            (2, 0, {"label": "a"}),
+            (3, 0, {"label": "b"}),
+        ]
+    )
+
+    assert bfs_based_rpq_by_vertice(graph, regex, {0}, {}) == {0: {2}}
+
+
+def test_bfs_based_rpq_by_vertice2():
+    regex = Regex("(a|b)*b(a|b)")
+    graph = MultiDiGraph(
+        [
+            (0, 1, {"label": "a"}),
+            (1, 1, {"label": "b"}),
+            (1, 2, {"label": "b"}),
+            (2, 3, {"label": "c"}),
+        ]
+    )
+
+    assert bfs_based_rpq_by_vertice(graph, regex, {0, 1}, {2}) == {0: {1, 2}, 1: {1, 2}}
