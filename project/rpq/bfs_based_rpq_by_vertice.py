@@ -1,6 +1,6 @@
 from networkx import MultiDiGraph
 from pyformlang.regular_expression import Regex
-from typing import Set, Dict
+from typing import Set, Dict, Any
 import scipy.sparse as sp
 
 from project.automata.utils import graph_to_nfa, regex_to_dfa
@@ -59,7 +59,7 @@ def bfs_based_rpq_by_vertice(
                 matrix_changed = True
                 masks[g_state] = new_matrix
 
-    result = dict()
+    result: Dict[Any, Set] = dict()
     for g_state_from in start_states:
         result[g_state_from] = set()
         for r_state, g_state_to in zip(
