@@ -3,7 +3,9 @@ from networkx import MultiDiGraph
 from pyformlang.regular_expression import Regex
 from pyformlang.finite_automaton import NondeterministicFiniteAutomaton
 
-from project.rpq.rpq import rpq, bfs_based_rpq, bfs_based_rpq_by_vertice
+from project.rpq.rpq import rpq
+from project.rpq.bfs_based_rpq import bfs_based_rpq
+from project.rpq.bfs_based_rpq_by_vertice import bfs_based_rpq_by_vertice
 
 
 def test_rpq_empty():
