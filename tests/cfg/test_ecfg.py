@@ -1,6 +1,6 @@
 import os
 import pytest
-from pyformlang.cfg import Terminal, Production, Variable
+from pyformlang.cfg import Variable
 from pyformlang.regular_expression import Regex
 from project.cfg.ecfg import ECFG
 

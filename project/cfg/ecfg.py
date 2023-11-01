@@ -34,6 +34,10 @@ class ECFG:
         return ECFG(cfg.variables, cfg.terminals, cfg.start_symbol, ecfg_productions)
 
     @staticmethod
+    def from_text(text: str) -> "ECFG":
+        return ECFG.from_cfg(CFG.from_text(text))
+
+    @staticmethod
     def from_file(path: str) -> "ECFG":
         if not os.path.exists(path):
             raise FileNotFoundError(path)
@@ -41,4 +45,4 @@ class ECFG:
         with open(path, "r") as file:
             cfg_text = file.read()
 
-        return ECFG.from_cfg(CFG.from_text(cfg_text))
+        return ECFG.from_text(cfg_text)
