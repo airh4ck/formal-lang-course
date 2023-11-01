@@ -19,7 +19,7 @@ class ECFG:
 
     @staticmethod
     def from_cfg(cfg: CFG) -> "ECFG":
-        ecfg_productions = dict()
+        ecfg_productions: Dict[Variable, Regex] = dict()
         for production in cfg.productions:
             head, body = production.head, production.body
             rhs = Regex(".".join(symbol.value for symbol in body))

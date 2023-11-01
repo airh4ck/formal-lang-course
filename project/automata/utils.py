@@ -16,7 +16,7 @@ def regex_to_dfa(regex: Regex) -> DeterministicFiniteAutomaton:
     )
 
 
-def regex_equivalence(self: Regex, other: Regex) -> bool:
+def regex_equivalence(self: Regex, other: Regex):
     return regex_to_dfa(self) == regex_to_dfa(other)
 
 
