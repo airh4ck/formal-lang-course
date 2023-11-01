@@ -16,6 +16,13 @@ def regex_to_dfa(regex: Regex) -> DeterministicFiniteAutomaton:
     )
 
 
+def regex_equivalence(self: Regex, other: Regex) -> bool:
+    return regex_to_dfa(self) == regex_to_dfa(other)
+
+
+Regex.__eq__ = regex_equivalence
+
+
 def graph_to_nfa(
     graph: MultiDiGraph, start_states: Set[int] = set(), final_states: Set[int] = set()
 ) -> NondeterministicFiniteAutomaton:
