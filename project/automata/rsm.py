@@ -5,8 +5,6 @@ from project.cfg.ecfg import ECFG
 from project.automata.utils import regex_to_dfa
 import os
 
-from loguru import logger
-
 
 class RecursiveStateMachine:
     def __init__(
@@ -24,7 +22,6 @@ class RecursiveStateMachine:
     @staticmethod
     def from_ecfg(ecfg: ECFG) -> "RecursiveStateMachine":
         automata = dict()
-        # logger.info(result.automata)
         for variable, regex in ecfg.productions.items():
             automata[variable] = regex_to_dfa(regex)
 
