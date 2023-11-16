@@ -60,3 +60,25 @@ def hellings(graph: MultiDiGraph, cfg: CFG) -> Set:
         result |= queue
 
     return result
+
+
+def cfpq_hellings(
+    graph: MultiDiGraph,
+    cfg: CFG,
+    start_variable: Variable = Variable("S"),
+    start_vertices: Set | None = None,
+    final_vertices: Set | None = None,
+) -> Set:
+    if not start_vertices:
+        start_vertices = set(graph.nodes)
+    if not final_vertices:
+        final_vertices = set(graph.nodes)
+
+    hellings_result = hellings(graph, cfg)
+    return set(
+        (v_from, v_to)
+        for variable, v_from, v_to in hellings_result
+        if variable == start_variable
+        and v_from in start_vertices
+        and v_to in final_vertices
+    )
