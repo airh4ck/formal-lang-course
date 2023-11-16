@@ -4,59 +4,58 @@ from pyformlang.cfg import CFG, Terminal, Variable
 
 from project.cfg.cfg import cfg_to_wcnf
 
-from loguru import logger
-
 
 def hellings(graph: MultiDiGraph, cfg: CFG) -> Set:
     wcnf = cfg_to_wcnf(cfg)
 
-    epsilon_productions = set()
-    terminal_productions = set()
-    variable_productions = set()
+    epsilon_productions = set(
+        production.head for production in wcnf.productions if len(production.body) == 0
+    )
+    terminal_productions = set(
+        (production.head, production.body[0])
+        for production in wcnf.productions
+        if len(production.body) == 1
+    )
+    variable_productions = set(
+        (production.head, production.body[0], production.body[1])
+        for production in wcnf.productions
+        if len(production.body) == 2
+    )
 
-    for production in wcnf.productions:
-        head, body = production.head, production.body
-        if len(body) == 0:
-            epsilon_productions.add(head)
-
-        if len(body) == 1:
-            terminal_productions.add((head, body[0]))
-
-        if len(body) == 2:
-            variable_productions.add((head, body[0], body[1]))
-
-    result = set()
-    for v_from, v_to, label in graph.edges(data="label"):
-        for variable, _ in filter(
-            lambda prod: prod[1] == Terminal(label), terminal_productions
-        ):
-            result.add((variable, v_from, v_to))
-
-    for vertice in graph.nodes:
-        for variable in epsilon_productions:
-            result.add((variable, vertice, vertice))
+    result = set(
+        (variable, vertice, vertice)
+        for variable in epsilon_productions
+        for vertice in graph.nodes
+    ) | set(
+        (variable, v_from, v_to)
+        for variable, terminal in terminal_productions
+        for v_from, v_to, label in graph.edges(data="label")
+        if terminal == Terminal(label)
+    )
 
     queue = result.copy()
     while len(queue) > 0:
         var_i, v_from, v_to = queue.pop()
-        for var_j, u_from, u_to in result:
-            if u_to == v_from:
-                for var_k, _, _ in filter(
-                    lambda prod: prod[1] == var_j
-                    and prod[2] == var_i
-                    and (prod[0], u_from, v_to) not in result,
-                    variable_productions,
-                ):
-                    queue.add((var_k, u_from, v_to))
 
-            if u_from == v_to:
-                for var_k, _, _ in filter(
-                    lambda prod: prod[1] == var_i
-                    and prod[2] == var_j
-                    and (prod[0], v_from, u_to) not in result,
-                    variable_productions,
-                ):
-                    queue.add((var_k, v_from, u_to))
+        queue |= set(
+            triple
+            for var_k, l_var, r_var in variable_productions
+            for var_j, u_from, u_to in result
+            if (
+                # in case (var_j, u_from, v_from) \in result
+                # and there is a production var_k -> var_j var_i
+                path := (u_from, v_to)
+                if u_to == v_from and l_var == var_j and r_var == var_i
+                else (
+                    # in case (var_j, v_to, u_to) \in result
+                    # and there is a production var_k -> var_i var_j
+                    (v_from, u_to)
+                    if u_from == v_to and l_var == var_i and r_var == var_j
+                    else None
+                )
+            )
+            and (triple := (var_k,) + path) not in result
+        )
         result |= queue
 
     return result
