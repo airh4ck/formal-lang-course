@@ -65,8 +65,8 @@ def cfpq_hellings(
     graph: MultiDiGraph,
     cfg: CFG,
     start_variable: Variable = Variable("S"),
-    start_vertices: Set | None = None,
-    final_vertices: Set | None = None,
+    start_vertices: "Set | None" = None,
+    final_vertices: "Set | None" = None,
 ) -> Set:
     if not start_vertices:
         start_vertices = set(graph.nodes)
