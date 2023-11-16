@@ -1,8 +1,10 @@
 from typing import Set
 from networkx import MultiDiGraph
-from pyformlang.cfg import CFG
+from pyformlang.cfg import CFG, Terminal, Variable
 
 from project.cfg.cfg import cfg_to_wcnf
+
+from loguru import logger
 
 
 def hellings(graph: MultiDiGraph, cfg: CFG) -> Set:
@@ -25,7 +27,9 @@ def hellings(graph: MultiDiGraph, cfg: CFG) -> Set:
 
     result = set()
     for v_from, v_to, label in graph.edges(data="label"):
-        for variable, _ in filter(lambda prod: prod[1] == label, terminal_productions):
+        for variable, _ in filter(
+            lambda prod: prod[1] == Terminal(label), terminal_productions
+        ):
             result.add((variable, v_from, v_to))
 
     for vertice in graph.nodes:
@@ -38,18 +42,21 @@ def hellings(graph: MultiDiGraph, cfg: CFG) -> Set:
         for var_j, u_from, u_to in result:
             if u_to == v_from:
                 for var_k, _, _ in filter(
-                    lambda prod: prod[1] == var_j and prod[2] == var_i,
-                    terminal_productions,
+                    lambda prod: prod[1] == var_j
+                    and prod[2] == var_i
+                    and (prod[0], u_from, v_to) not in result,
+                    variable_productions,
                 ):
                     queue.add((var_k, u_from, v_to))
-                    result.add((var_k, u_from, v_to))
 
             if u_from == v_to:
                 for var_k, _, _ in filter(
-                    lambda prod: prod[1] == var_i and prod[2] == var_j,
-                    terminal_productions,
+                    lambda prod: prod[1] == var_i
+                    and prod[2] == var_j
+                    and (prod[0], v_from, u_to) not in result,
+                    variable_productions,
                 ):
                     queue.add((var_k, v_from, u_to))
-                    result.add((var_k, v_from, u_to))
+        result |= queue
 
     return result
