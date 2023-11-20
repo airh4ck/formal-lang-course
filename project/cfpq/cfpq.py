@@ -1,14 +1,12 @@
-from typing import Set
+from typing import Set, Callable
 from networkx import MultiDiGraph
-from pyformlang.cfg import CFG, Terminal, Variable
-
-from project.cfg.cfg import cfg_to_wcnf
+from pyformlang.cfg import CFG, Variable
 
 
 def cfpq(
     graph: MultiDiGraph,
     cfg: CFG,
-    algorithm: callable,
+    algorithm: Callable,
     start_variable: Variable = Variable("S"),
     start_vertices: "Set | None" = None,
     final_vertices: "Set | None" = None,
