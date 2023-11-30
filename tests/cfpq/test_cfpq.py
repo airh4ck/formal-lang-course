@@ -3,8 +3,16 @@ from typing import Set
 from pyformlang.cfg import CFG, Production, Variable, Terminal
 from networkx import MultiDiGraph
 
+from project.cfpq.hellings import hellings
 from project.cfpq.matrix_prod import mprod_based_algorithm
+from project.cfpq.tensor import tensor_based
 from project.cfpq.cfpq import cfpq
+
+
+@pytest.fixture(params=[hellings, mprod_based_algorithm, tensor_based])
+def algorithm(request):
+    return request.param
+
 
 test_graphs = [
     MultiDiGraph(),
@@ -95,8 +103,8 @@ test_cfgs = [
         ],
     ),
 )
-def test_matrix_based(graph: MultiDiGraph, cfg: CFG, expected: Set):
-    assert mprod_based_algorithm(graph, cfg) == expected
+def test_hellings(graph: MultiDiGraph, cfg: CFG, expected: Set):
+    assert hellings(graph, cfg) == expected
 
 
 @pytest.mark.parametrize(
@@ -107,5 +115,5 @@ def test_matrix_based(graph: MultiDiGraph, cfg: CFG, expected: Set):
         [set(), {(0, 2), (0, 3)}, {(1, 3), (0, 2), (2, 3), (1, 2), (0, 3), (2, 2)}],
     ),
 )
-def test_cfpq_matrix_based(graph: MultiDiGraph, cfg: CFG, expected: Set):
-    assert cfpq(graph, cfg, algorithm=mprod_based_algorithm) == expected
+def test_cfpq(algorithm, graph: MultiDiGraph, cfg: CFG, expected: Set):
+    assert cfpq(graph, cfg, algorithm=algorithm) == expected
