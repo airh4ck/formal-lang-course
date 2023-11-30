@@ -16,7 +16,6 @@ def tensor_based(
     graph_decomposed = DecomposedFA.from_fa(graph_to_nfa(graph))
     rsm = RecursiveStateMachine.from_ecfg(ECFG.from_cfg(cfg))
     rsm_decomposed = DecomposedFA.from_rsm(rsm)
-    variables = set()
 
     for production in cfg.productions:
         if len(production.body) != 0:
