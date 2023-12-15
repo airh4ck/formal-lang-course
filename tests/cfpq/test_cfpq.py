@@ -4,12 +4,20 @@ from pyformlang.cfg import CFG, Production, Variable, Terminal
 from networkx import MultiDiGraph
 
 from project.cfpq.hellings import hellings
-from project.cfpq.matrix_prod import mprod_based_algorithm
-from project.cfpq.tensor import tensor_based
+from project.cfpq.matrix_prod import mprod_based_algorithm, cb_mprod_based_algorithm
+from project.cfpq.tensor import tensor_based, cb_tensor_based
 from project.cfpq.cfpq import cfpq
 
 
-@pytest.fixture(params=[hellings, mprod_based_algorithm, tensor_based])
+@pytest.fixture(
+    params=[
+        hellings,
+        mprod_based_algorithm,
+        tensor_based,
+        cb_mprod_based_algorithm,
+        cb_tensor_based,
+    ]
+)
 def algorithm(request):
     return request.param
 
