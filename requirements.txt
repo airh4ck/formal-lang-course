@@ -3,6 +3,7 @@ black
 cfpq-data
 mypy
 pre-commit
+pycubool
 pydot
 pyformlang
 pytest
