@@ -1,5 +1,7 @@
 from pyformlang.finite_automaton import FiniteAutomaton, NondeterministicFiniteAutomaton
-from scipy.sparse import csr_matrix, kron
+from scipy.sparse import csr_matrix, kron, block_diag
+
+from typing import Dict, Any
 
 
 class DecomposedFA:
@@ -81,5 +83,22 @@ class DecomposedFA:
 
         for _ in range(self.num_states):
             result += result @ result
+
+        return result
+
+    def direct_sum(self, other: "DecomposedFA") -> Dict[Any, csr_matrix]:
+        result = dict()
+
+        for label in self.matrices.keys() | other.matrices.keys():
+            self_matrix = self.matrices.get(
+                label, csr_matrix((self.num_states, self.num_states), dtype=bool)
+            )
+            other_matrix = other.matrices.get(
+                label, csr_matrix((other.num_states, other.num_states), dtype=bool)
+            )
+
+            result[label] = block_diag(
+                (self_matrix, other_matrix), format="csr", dtype=bool
+            )
 
         return result

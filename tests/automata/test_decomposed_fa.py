@@ -108,3 +108,51 @@ def test_transitive_closure():
     nfa.add_final_state(1)
 
     assert DecomposedFA.from_fa(nfa).transitive_closure().sum() == 5
+
+
+def test_direct_sum_empty():
+    nfa = NondeterministicFiniteAutomaton()
+    decomposed_nfa = DecomposedFA.from_fa(nfa)
+    assert decomposed_nfa.direct_sum(decomposed_nfa) == dict()
+
+
+def test_direct_sum():
+    left = NondeterministicFiniteAutomaton()
+    left.add_transitions(
+        [(0, "a", 0), (0, "a", 1), (0, "b", 1), (1, "b", 0), (1, "b", 1)]
+    )
+
+    right = NondeterministicFiniteAutomaton()
+    right.add_transitions(
+        [
+            (0, "a", 1),
+            (1, "a", 1),
+            (1, "a", 2),
+            (2, "a", 2),
+            (0, "b", 0),
+            (1, "b", 0),
+            (1, "b", 1),
+            (1, "b", 2),
+        ]
+    )
+
+    direct_sum = DecomposedFA.from_fa(left).direct_sum(DecomposedFA.from_fa(right))
+    a_matrix = [
+        [1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0],
+        [0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1],
+    ]
+
+    b_matrix = [
+        [0, 1, 0, 0, 0],
+        [1, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 1, 1],
+        [0, 0, 0, 0, 0],
+    ]
+
+    assert direct_sum.keys() == {"a", "b"}
+    assert (direct_sum["a"].toarray() != a_matrix).sum() == 0
+    assert (direct_sum["b"].toarray() != b_matrix).sum() == 0

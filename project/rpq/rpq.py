@@ -1,9 +1,10 @@
 from networkx import MultiDiGraph
 from pyformlang.regular_expression import Regex
-from typing import Set
+from typing import Set, Dict
 
 from project.automata.utils import graph_to_nfa, regex_to_dfa
 from project.automata.decomposed_fa import DecomposedFA
+import scipy.sparse as sp
 
 
 def rpq(
