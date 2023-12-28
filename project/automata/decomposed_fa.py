@@ -1,5 +1,10 @@
-from pyformlang.finite_automaton import FiniteAutomaton, NondeterministicFiniteAutomaton
+from pyformlang.finite_automaton import (
+    FiniteAutomaton,
+    NondeterministicFiniteAutomaton,
+    State,
+)
 from scipy.sparse import csr_matrix, kron, block_diag
+from project.automata.rsm import RecursiveStateMachine
 
 from typing import Dict, Any
 
@@ -30,6 +35,38 @@ class DecomposedFA:
             result.matrices[label][
                 result.states_with_indices[s_from], result.states_with_indices[s_to]
             ] = True
+
+        return result
+
+    @staticmethod
+    def from_rsm(rsm: RecursiveStateMachine) -> "DecomposedFA":
+        result = DecomposedFA()
+        states = set()
+        result.start_states = set()
+        result.final_states = set()
+
+        for variable, dfa in rsm.automata.items():
+            for st in dfa.states:
+                state = State((variable, st.value))
+                states.add(state)
+                if st in dfa.start_states:
+                    result.start_states.add(state)
+                if st in dfa.final_states:
+                    result.final_states.add(state)
+
+        result.num_states = len(states)
+        result.states_with_indices = dict(zip(states, range(result.num_states)))
+        for variable, dfa in rsm.automata.items():
+            for s_from, label, s_to in dfa:
+                if label not in result.matrices:
+                    result.matrices[label] = csr_matrix(
+                        (result.num_states, result.num_states), dtype=bool
+                    )
+
+                result.matrices[label][
+                    result.states_with_indices[State((variable, s_from.value))],
+                    result.states_with_indices[State((variable, s_to.value))],
+                ] = True
 
         return result
 
