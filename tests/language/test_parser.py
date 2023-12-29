@@ -1,5 +1,10 @@
 import pytest
-from project.language.parser import parse_check
+from project.language.parser import parse_check, parse_to_dot
+
+import os
+import filecmp
+
+RESOURCES_PATH = "tests/resources/parser"
 
 positive_tests = [
     'x = "string"',
@@ -43,3 +48,22 @@ negative_tests = [
 )
 def test_check(program, expected):
     assert parse_check(program) == expected
+
+
+@pytest.mark.parametrize(
+    "program, expected_filename",
+    [
+        ("x = map (lambda g -> g*) lst", "expected1.dot"),
+        ("x = filter (lambda -> true) [1..100]", "expected2.dot"),
+    ],
+)
+def test_dot(program, expected_filename):
+    tmp_path = os.path.join(RESOURCES_PATH, "tmp.dot")
+    expected_path = os.path.join(RESOURCES_PATH, expected_filename)
+    parse_to_dot(program, tmp_path)
+
+    assert filecmp.cmp(
+        tmp_path,
+        expected_path,
+    )
+    os.remove(tmp_path)
