@@ -19,7 +19,9 @@ def parse(program: str) -> langParser:
 def parse_check(program: str) -> bool:
     parser = parse(program)
     parser.prog()
-    return parser.getNumberOfSyntaxErrors() == 0
+
+    result: bool = parser.getNumberOfSyntaxErrors() == 0
+    return result
 
 
 def parse_to_dot(program: str, path: str):

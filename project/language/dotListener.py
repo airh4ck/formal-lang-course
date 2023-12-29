@@ -2,15 +2,16 @@ from antlr4 import ParserRuleContext
 from antlr4.tree.Tree import TerminalNode
 
 from project.language.langListener import langListener
-
 from pydot import Dot, Edge, Node
+
+from typing import Dict, Any
 
 
 class DotListener(langListener):
     def __init__(self, tree: Dot, rules):
         self.tree = tree
         self.num_nodes = 0
-        self.nodes = {}
+        self.nodes: Dict[Any, int] = {}
         self.rules = rules
         super(DotListener, self).__init__()
 
