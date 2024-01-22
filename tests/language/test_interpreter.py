@@ -88,11 +88,11 @@ from project.language.interpreter import interpret
         ),
         (
             """
-            g = load "tests/resources/interpreter/sample.dot"
+            g = load "tests/resources/interpreter/sample_labels.dot"
             s = get_labels g
             print s
             """,
-            "{a, b}\n",
+            "{s}\n",
         ),
         (
             """
