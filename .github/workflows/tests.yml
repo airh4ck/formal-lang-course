@@ -48,7 +48,7 @@ jobs:
           python -m pip install -r requirements.txt
 
       - name: Generate ANTLR parser
-        run: antlr4 project/language/lang.g4 -Dlanguage=Python3
+        run: antlr4 project/language/lang.g4 -visitor -Dlanguage=Python3
 
       - name: Run tests
         run: |
