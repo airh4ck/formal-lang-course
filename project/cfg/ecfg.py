@@ -22,7 +22,8 @@ class ECFG:
         ecfg_productions: Dict[Variable, Regex] = dict()
         for production in cfg.productions:
             head, body = production.head, production.body
-            rhs = Regex(".".join(symbol.value for symbol in body))
+
+            rhs = Regex(".".join(str(symbol.value) for symbol in body))
             if len(body) == 0:
                 rhs = Regex("$")
 

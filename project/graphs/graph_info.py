@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, Set
+from networkx import MultiDiGraph
 import cfpq_data
 
 
@@ -19,3 +20,8 @@ def get_graph_info(name: str) -> GraphInfo:
         graph.number_of_edges(),
         set(cfpq_data.get_sorted_labels(graph)),
     )
+
+
+def get_graph(name: str) -> MultiDiGraph:
+    path = cfpq_data.download(name)
+    return cfpq_data.graph_from_csv(path)
