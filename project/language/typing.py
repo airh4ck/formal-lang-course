@@ -20,7 +20,7 @@ class MySet:
             if any(not isinstance(elem, self.__elem_type) for elem in st):
                 raise TypeError("Set elements must be of the same type")
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.__set.__str__()
 
     @property
@@ -132,7 +132,7 @@ class MyCFG:
     def from_text(cfg):
         return MyCFG(CFG.from_text(cfg))
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.__cfg.to_text()
 
     def get_reachable(self):

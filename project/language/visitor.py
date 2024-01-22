@@ -131,9 +131,6 @@ class Visitor(langVisitor):
     def visitGet_vertices(self, ctx: langParser.Get_verticesContext):
         return self.visit(ctx.graph()).get_vertices()
 
-    def visitGet_vertices(self, ctx: langParser.Get_reachableContext):
-        return self.visit(ctx.graph()).get_reachable()
-
     def visitEmpty_list(self, ctx: langParser.Empty_listContext):
         return MySet(set())
 
